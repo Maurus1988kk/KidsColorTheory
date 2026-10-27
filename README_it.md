@@ -12,7 +12,9 @@ colorate in un calderone e si scopre come nascono i colori secondari.
 
 ## 1. Per le maestre
 
-1. **Scaricate** il file (`MixaPozioni.exe` per Windows, `MixaPozioni-Mac.zip` per Mac).
+1. Aprite la pagina [**Releases**](../../releases/latest) di questo repository e, sotto *Assets*,
+   **scaricate** il file per il vostro computer: `MixaPozioni-Windows.exe` (Windows) oppure
+   `MixaPozioni-Mac.zip` (Mac). **Non** serve compilare nulla.
 2. **Doppio clic** per aprirlo. Non serve installare nulla.
 
 **Windows** – se compare l'avviso blu "Windows ha protetto il PC":
@@ -65,6 +67,10 @@ Gli script creano un venv, installano le dipendenze e lanciano PyInstaller
    Windows, macOS e Linux.
 3. A fine esecuzione, nella pagina del run, sezione **Artifacts**, scaricate
    `MixaPozioni-Windows` (contiene l'`.exe`), `MixaPozioni-Mac`, `MixaPozioni-Linux`.
+   Gli Artifacts richiedono un account GitHub e scadono dopo 90 giorni.
+4. **Per pubblicare una Release per le maestre**, create e pubblicate un tag di versione:
+   `git tag v1.0.0 && git push origin v1.0.0`. Il workflow allega i tre file a una Release
+   pubblica, quella a cui rimanda la sezione "Per le maestre".
 
 ### Struttura
 ```

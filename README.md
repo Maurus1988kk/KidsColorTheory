@@ -13,7 +13,9 @@ The game's interface is entirely in Italian.
 
 ## 1. For teachers
 
-1. **Download** the file (`MixaPozioni.exe` for Windows, `MixaPozioni-Mac.zip` for Mac).
+1. Open the [**Releases** page](../../releases/latest) of this repository and, under *Assets*,
+   **download** the file for your computer: `MixaPozioni-Windows.exe` (Windows) or
+   `MixaPozioni-Mac.zip` (Mac). You do **not** need to build anything.
 2. **Double-click** to open it. Nothing needs to be installed.
 
 **Windows** – if the blue "Windows protected your PC" warning appears, click
@@ -66,6 +68,10 @@ The scripts create a venv, install the dependencies and run PyInstaller
    Windows, macOS and Linux.
 3. When the run finishes, open its page and download the files from the **Artifacts**
    section: `MixaPozioni-Windows` (contains the `.exe`), `MixaPozioni-Mac`, `MixaPozioni-Linux`.
+   Artifacts need a GitHub login and expire after 90 days.
+4. **To publish a release for teachers**, create and push a version tag:
+   `git tag v1.0.0 && git push origin v1.0.0`. The workflow then attaches the three files to a
+   public Release, which is what the "For teachers" section links to.
 
 ### Project structure
 ```
