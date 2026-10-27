@@ -4,8 +4,7 @@
 
 An educational game for primary-school children (ages 6-10): mix colourful potions
 in a cauldron and discover how secondary colours are made.
-Free-play "play and discover" mode: no missions, just exploration. The game's
-interface is entirely in Italian.
+The game's interface is entirely in Italian.
 
 ![Paint](docs/screenshot_pittura.png)
 ![Light](docs/screenshot_luce.png)
