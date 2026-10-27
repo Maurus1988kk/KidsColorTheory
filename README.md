@@ -1,35 +1,38 @@
 # 🧪 MixaPozioni
 
-Gioco educativo per bambini delle elementari (6-10 anni): si mescolano pozioni
-colorate in un calderone e si scopre come nascono i colori secondari.
-Modalità libera "gioca e scopri": nessuna missione, solo esplorazione.
+🇮🇹 [Versione italiana](README_it.md)
 
-![Pittura](docs/screenshot_pittura.png)
-![Luce](docs/screenshot_luce.png)
+An educational game for primary-school children (ages 6-10): mix colourful potions
+in a cauldron and discover how secondary colours are made.
+Free-play "play and discover" mode: no missions, just exploration. The game's
+interface is entirely in Italian.
 
----
-
-## 1. Per le maestre
-
-1. **Scaricate** il file (`MixaPozioni.exe` per Windows, `MixaPozioni-Mac.zip` per Mac).
-2. **Doppio clic** per aprirlo. Non serve installare nulla.
-
-**Windows** – se compare l'avviso blu "Windows ha protetto il PC":
-clic su **"Maggiori informazioni"** → **"Esegui comunque"**. (Succede perché il programma è nuovo, non perché sia pericoloso.)
-
-**Mac** – decomprimete lo zip, poi **tasto destro** su MixaPozioni → **Apri** → **Apri**.
-
-**Come si gioca:** si clicca sulle pozioni per far cadere gocce nel calderone e
-si legge il nome del colore ottenuto. "Svuota" per ricominciare.
-"Pittura" e "Luce" cambiano il modo di mescolare. Tasto **F11** = schermo intero,
-**M** = muto. **ESC** non chiude il gioco: chiede prima conferma.
+![Paint](docs/screenshot_pittura.png)
+![Light](docs/screenshot_luce.png)
 
 ---
 
-## 2. Per lo sviluppatore
+## 1. For teachers
 
-### Setup ed esecuzione
-Serve Python 3.10+.
+1. **Download** the file (`MixaPozioni.exe` for Windows, `MixaPozioni-Mac.zip` for Mac).
+2. **Double-click** to open it. Nothing needs to be installed.
+
+**Windows** – if the blue "Windows protected your PC" warning appears, click
+**"More info"** → **"Run anyway"**. (It shows up because the program is new and unsigned, not because it is dangerous.)
+
+**Mac** – unzip the file, then **right-click** MixaPozioni → **Open** → **Open**.
+
+**How to play:** click the potions to drop doses into the cauldron and read the name
+of the colour you get. "Svuota" (Empty) starts over. "Pittura" (Paint) and "Luce" (Light)
+switch the way colours mix. **F11** = full screen, **M** = mute. **ESC** never closes the
+game straight away: it asks for confirmation first.
+
+---
+
+## 2. For developers
+
+### Setup and run
+Requires Python 3.10+.
 
 ```bash
 python -m venv .venv
@@ -38,78 +41,80 @@ pip install -r requirements-dev.txt
 python main.py
 ```
 
-### Test
+### Tests
 ```bash
 python -m pytest -q
 ```
-`tests/test_color_mixing.py` testa mixing e nomi colore (funzioni pure);
-`tests/test_smoke.py` avvia l'intero gioco in headless (driver SDL `dummy`),
-simula clic/cambio modalità/svuota/ESC/ridimensionamento. Lo stesso script
-(`tools/smoke_test.py`) rigenera gli screenshot in `docs/`.
+`tests/test_color_mixing.py` tests colour mixing and colour names (pure functions);
+`tests/test_smoke.py` runs the whole game headless (SDL `dummy` drivers) and simulates
+clicks, mode switching, emptying, ESC and window resizing. The same script
+(`tools/smoke_test.py`) regenerates the screenshots in `docs/`.
 
-### Build dell'eseguibile
-| Sistema | Comando | Risultato |
+### Building the executable
+| System | Command | Output |
 |---|---|---|
 | Windows | `build_windows.bat` | `dist\MixaPozioni.exe` |
 | Mac | `./build_mac.sh` | `dist/MixaPozioni.app` |
 | Linux | `./build_linux.sh` | `dist/MixaPozioni` |
 
-Gli script creano un venv, installano le dipendenze e lanciano PyInstaller
-(`--onefile --windowed`, su Mac `--onedir --windowed`, vedi sotto).
+The scripts create a venv, install the dependencies and run PyInstaller
+(`--onefile --windowed`; on Mac `--onedir --windowed`, see below).
 
-### Ottenere l'.exe senza una macchina Windows (GitHub Actions)
-1. Caricate il progetto su un repository GitHub e fate push su `main`
-   (oppure *Actions → Build MixaPozioni → Run workflow*).
-2. Il workflow `.github/workflows/build.yml` esegue i test e compila su
-   Windows, macOS e Linux.
-3. A fine esecuzione, nella pagina del run, sezione **Artifacts**, scaricate
-   `MixaPozioni-Windows` (contiene l'`.exe`), `MixaPozioni-Mac`, `MixaPozioni-Linux`.
+### Getting the .exe without a Windows machine (GitHub Actions)
+1. Push the project to a GitHub repository on `main`
+   (or go to *Actions → Build MixaPozioni → Run workflow*).
+2. The workflow `.github/workflows/build.yml` runs the tests and builds on
+   Windows, macOS and Linux.
+3. When the run finishes, open its page and download the files from the **Artifacts**
+   section: `MixaPozioni-Windows` (contains the `.exe`), `MixaPozioni-Mac`, `MixaPozioni-Linux`.
 
-### Struttura
+### Project structure
 ```
-main.py                 entry point (DPI awareness, log errori su file)
-game/constants.py       layout, temi, resource_path() per PyInstaller (sys._MEIPASS)
-game/color_mixing.py    mixing Pittura (RYB) e Luce (RGB), funzioni pure
-game/color_names.py     nomi italiani (tabelle separate per modalità)
-game/entities.py        pozioni, calderone, gocce, particelle, contatori
-game/ui.py              font, icone disegnate, pulsanti, selettore modalità
-game/audio.py           suoni sintetizzati con numpy + fallback senza audio
-game/game.py            loop, stati, scaling, eventi
+main.py                 entry point (DPI awareness, error log to file)
+game/constants.py       layout, themes, resource_path() for PyInstaller (sys._MEIPASS)
+game/color_mixing.py    Paint (RYB) and Light (RGB) mixing, pure functions
+game/color_names.py     Italian colour names (separate tables per mode)
+game/entities.py        potions, cauldron, drops, particles, dose counters
+game/ui.py              fonts, hand-drawn icons, buttons, mode selector
+game/audio.py           numpy-synthesised sounds + silent fallback
+game/game.py            main loop, states, scaling, events
 ```
 
-### Scelte tecniche
-- **Pittura = modello RYB con interpolazione trilineare.** I 3 primari (R, Y, B) sono
-  coordinate nel cubo RYB; gli 8 vertici sono mappati su colori RGB scelti a mano
-  (derivati dal cubo di Gosset-Chen ma più vivaci: il blu "alla Gosset" è troppo spento
-  per dei bambini). Le dosi vengono **normalizzate dividendo per la più grande**, così
-  1R+1Y e 4R+4Y danno lo stesso arancione saturo (senza normalizzare si mescolerebbe
-  bianco e il colore risulterebbe slavato). R+Y+B in parti uguali dà il marrone.
-  Una miscela sottrattiva "fisica" (Kubelka-Munk) è stata scartata: con primari RYB
-  scolastici produce verdi e viola poco riconoscibili.
-- **Luce = somma additiva RGB** con le stesse proporzioni normalizzate; parti uguali
-  di R, G, B danno bianco. Sfondo scuro, calderone scuro e alone luminoso.
-- **Nomi colore**: nome più vicino in spazio CIE Lab, tra 12 nomi (Pittura) e 13 (Luce:
-  include Bianco, Magenta, Ciano, Giallo). Nomi "difficili" evitati.
-- **Dosi massime = 10**, contate anche quelle ancora in caduta; oltre, l'ampolla
-  trema e compare il fumetto "Pieno!" (nessun errore o suono brutto).
-- **Cambio modalità** svuota il calderone all'istante; **"Svuota"** fa un'animazione
-  (calderone inclinato che versa).
-- **Scaling**: superficie logica fissa 1024×768 scalata alla finestra con bande nere.
-  Se lo schermo è piccolo la finestra iniziale si riduce mantenendo le proporzioni.
-- **Schermo intero**: F11 o F o il pulsante in alto; **ESC** esce dal pieno schermo,
-  in finestra chiede conferma ("Vuoi uscire?"). La X della finestra chiude subito.
-- **Font**: primo disponibile tra Comic Sans, Trebuchet, Verdana, Segoe UI, DejaVu,
-  Arial; altrimenti il font incluso in pygame. Nessun font viene distribuito.
-- **Grafica/audio**: zero asset esterni. Le parti statiche (ampolle, calderone, sfondi)
-  sono precalcolate con supersampling; le particelle rimpiccioliscono invece di usare
-  alpha per tenere i 60 FPS anche su PC vecchi. I suoni sono sintetizzati con numpy;
-  senza scheda audio il gioco parte comunque muto.
-- **Touch**: i touchscreen generano eventi mouse (comportamento SDL di default),
-  quindi non serve codice dedicato. Aree di clic maggiorate di 22 px sulle pozioni.
-- **macOS**: PyInstaller sconsiglia `--onefile` con `--windowed` (deprecato), quindi
-  si usa `--onedir --windowed`, che produce comunque una singola `.app`. Non essendo
-  firmata, serve "tasto destro → Apri" al primo avvio.
-- **Errori**: se il gioco si blocca all'avvio scrive `MixaPozioni_errore.txt` nella
-  cartella utente (con `--windowed` non c'è console).
-- Il jingle e le scintille partono quando, dopo una miscela di almeno 2 primari, il
-  nome del colore cambia.
+### Technical decisions
+- **Paint = RYB model with trilinear interpolation.** The 3 primaries (R, Y, B) are
+  coordinates in the RYB cube; its 8 corners are mapped to hand-picked RGB colours
+  (derived from the classic Gosset-Chen cube but more vivid: the original blue is too dull
+  for children). Doses are **normalised by dividing by the largest one**, so
+  1R+1Y and 4R+4Y give the same saturated orange (without normalising, white would be
+  mixed in and the result would look washed out). Equal parts of R+Y+B give brown.
+  A "physical" subtractive mix (Kubelka-Munk) was discarded: with school RYB primaries
+  it produces greens and purples that are hard to recognise.
+  RYB was chosen because it is what is taught in school; strictly speaking, the
+  subtractive primaries are cyan, magenta and yellow.
+- **Light = additive RGB sum** using the same normalised proportions; equal parts
+  of R, G, B give white. Dark background, dark cauldron and a glowing halo.
+- **Colour names**: nearest name in CIE Lab space among 12 names (Paint) and 13 (Light:
+  including White, Magenta, Cyan, Yellow). Difficult names are avoided.
+- **Maximum 10 doses**, counting those still falling; beyond that the flask shakes
+  and a "Pieno!" (Full) speech bubble appears (no errors or harsh sounds).
+- **Switching mode** empties the cauldron instantly; **"Svuota"** plays an animation
+  (the cauldron tilts and pours).
+- **Scaling**: fixed 1024×768 logical surface scaled to the window with black bars.
+  On small screens the initial window shrinks while keeping the aspect ratio.
+- **Full screen**: F11, F, or the button at the top; **ESC** leaves full screen, and in
+  windowed mode asks for confirmation ("Vuoi uscire?"). The window's X closes immediately.
+- **Fonts**: first available among Comic Sans, Trebuchet, Verdana, Segoe UI, DejaVu,
+  Arial; otherwise the font bundled with pygame. No font is distributed.
+- **Graphics/audio**: zero external assets. Static parts (flasks, cauldron, backgrounds)
+  are precomputed with supersampling; particles shrink instead of using alpha to keep
+  60 FPS on old PCs. Sounds are synthesised with numpy; without an audio device the
+  game still starts, silently.
+- **Touch**: touchscreens generate mouse events (SDL default), so no dedicated code is
+  needed. Click areas on potions are enlarged by 22 px.
+- **macOS**: PyInstaller discourages `--onefile` with `--windowed` (deprecated), so
+  `--onedir --windowed` is used, which still produces a single `.app`. Being unsigned,
+  it needs right-click → Open on first launch.
+- **Errors**: if the game crashes at startup it writes `MixaPozioni_errore.txt` in the
+  user's home folder (there is no console with `--windowed`).
+- The jingle and sparkles fire when, after mixing at least 2 primaries, the colour
+  name changes.
