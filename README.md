@@ -2,7 +2,7 @@
 
 Gioco educativo per bambini delle elementari (6-10 anni): si mescolano pozioni
 colorate in un calderone e si scopre come nascono i colori secondari.
-Modalità libera "gioca e scopri": nessuna missione, solo esplorazione.
+
 
 ![Pittura](docs/screenshot_pittura.png)
 ![Luce](docs/screenshot_luce.png)
