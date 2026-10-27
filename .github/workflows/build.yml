@@ -1,0 +1,51 @@
+name: Build MixaPozioni
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: MixaPozioni-Windows
+            path: dist/MixaPozioni.exe
+          - os: macos-latest
+            artifact: MixaPozioni-Mac
+            path: dist/MixaPozioni-mac.zip
+          - os: ubuntu-latest
+            artifact: MixaPozioni-Linux
+            path: dist/MixaPozioni
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Installa dipendenze
+        run: python -m pip install -r requirements-dev.txt
+      - name: Test
+        run: python -m pytest -q
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+      - name: Build (Windows / Linux, file unico)
+        if: runner.os != 'macOS'
+        run: python -m PyInstaller --noconfirm --clean --onefile --windowed --name MixaPozioni main.py
+      - name: Build (macOS, .app)
+        if: runner.os == 'macOS'
+        run: |
+          python -m PyInstaller --noconfirm --clean --onedir --windowed --name MixaPozioni main.py
+          # ditto conserva i permessi di esecuzione dentro l'.app (uno zip normale no)
+          ditto -c -k --sequesterRsrc --keepParent dist/MixaPozioni.app dist/MixaPozioni-mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.path }}
+          if-no-files-found: error
